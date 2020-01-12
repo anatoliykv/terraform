@@ -15,8 +15,9 @@ resource "aws_instance" "mywebserver" {
 #!/bin/bash
 sudo apt-get update
 sudo apt-get install nginx -y
+sudo 
 #keepalived_install
-sudo apt-get install build-essential libssl-dev
+sudo apt-get install build-essential libssl-dev -y
 wget https://www.keepalived.org/software/keepalived-2.0.19.tar.gz
 tar xzvf keepalived*
 cd keepalived*
