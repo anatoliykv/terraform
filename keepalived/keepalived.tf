@@ -15,7 +15,7 @@ resource "aws_instance" "mywebserver" {
 #!/bin/bash
 sudo apt-get update
 sudo apt-get install nginx -y
-sudo 
+sudo
 #keepalived_install
 sudo apt-get install build-essential libssl-dev -y
 wget https://www.keepalived.org/software/keepalived-2.0.19.tar.gz
@@ -61,4 +61,7 @@ resource "aws_security_group" "my_webserver" {
     Name = "WebServer Security Group Terraform"
     Owner = "anatoliykv Terraform"
   }
+}
+resource "aws_key_pair" "deployer" {
+  key_name   = "key for ubuntu"
 }
