@@ -1,13 +1,13 @@
 #-----------------------------------------
 #My terraform
-#Build Web Server during Bootstrap
+#Build server with Docker, WP, SQL
 
 provider "aws" {
   region = "eu-central-1"
 }
 
 /*коментарий*/
-resource "aws_instance" "mywebserver" {
+resource "aws_instance" "Docker_WP_SQL" {
     ami                    = "ami-0cc0a36f626a4fdf5" #Ubuntu
     instance_type          = "t2.micro"
     vpc_security_group_ids = [aws_security_group.my_webserver.id]
@@ -48,5 +48,16 @@ resource "aws_security_group" "my_webserver" {
   tags = {
     Name = "WebServer Security Group Terraform"
     Owner = "anatoliykv Terraform"
+  }
+}
+#Private IP for instance
+resource "aws_network_interface" "IP_for_HAProxy" {
+  subnet_id       = "${aws_subnet.public_a.id}"
+  private_ips     = ["10.0.0.50"]
+  security_groups = ["${aws_security_group.web.id}"]
+
+  attachment {
+    instance     = "${aws_instance.test.id}"
+    device_index = 1
   }
 }
