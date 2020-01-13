@@ -11,20 +11,8 @@ resource "aws_instance" "mywebserver" {
     ami                    = "ami-0cc0a36f626a4fdf5" #Ubuntu
     instance_type          = "t2.micro"
     vpc_security_group_ids = [aws_security_group.my_webserver.id]
-    key_name = "key_for_terraform"
-    user_data = <<EOF
-#!/bin/bash
-sudo apt-get update
-sudo apt-get install nginx -y
-sudo apt-get install build-essential libssl-dev -y
-wget https://www.keepalived.org/software/keepalived-2.0.19.tar.gz
-tar xzvf keepalived*
-rm -rf keepalived*.tar.gz
-cd keepalived*
-./configure
-make
-sudo make install
-EOF
+    key_name               = "key_for_terraform"
+    user_data              = file("user_data.sh")
 
   tags = {
     Name = "Keepalived build by Terraform"
