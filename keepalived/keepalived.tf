@@ -11,7 +11,7 @@ resource "aws_instance" "mywebserver" {
     ami                    = "ami-0cc0a36f626a4fdf5" #Ubuntu
     instance_type          = "t2.micro"
     vpc_security_group_ids = [aws_security_group.my_webserver.id]
-    key_name = "key for ubuntu"
+    key_name = "key_for_terraform"
     user_data = <<EOF
 #!/bin/bash
 sudo apt-get update
@@ -24,17 +24,16 @@ cd keepalived*
 ./configure
 make
 sudo make install
-keepalived -v
 EOF
 
   tags = {
-    Name = "WebServer Build by Terraform"
+    Name = "Keepalived build by Terraform"
     Owner = "anatoliykv"
   }
 }
 
 resource "aws_security_group" "my_webserver" {
-  name        = "allow_tls"
+  name        = "allow_tls_ssh"
   description = "My Security group"
 
   ingress {
@@ -47,6 +46,13 @@ resource "aws_security_group" "my_webserver" {
   ingress {
     from_port   = 443
     to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]# add a CIDR block here
+  }
+
+  ingress {
+    from_port   = 82
+    to_port     = 82
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]# add a CIDR block here
   }
